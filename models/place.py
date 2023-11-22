@@ -85,7 +85,7 @@ class Place(BaseModel, Base):
     if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def amenities(self):
-            """attribute that returns list of Amenity instances"""
+            """returns list of Amenities"""
             values_amenity = models.storage.all("Amenity").values()
             list_amenity = []
             for amenity in values_amenity:

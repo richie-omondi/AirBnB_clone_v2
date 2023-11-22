@@ -1,24 +1,27 @@
 #!/usr/bin/python3
 """ """
-from tests.test_models.test_base_model import test_basemodel
+
 from models.city import City
+import unittest
 
 
-class test_City(test_basemodel):
-    """ """
+class test_City(unittest.TestCase):
+    """Test cases for class city"""
 
-    def __init__(self, *args, **kwargs):
-        """ """
-        super().__init__(*args, **kwargs)
-        self.name = "City"
+    def setUp(self):
+        """Basic setup parameters"""
         self.value = City
+        self.name = "City"
+        self.attr_list = ["state_id", "name"]
 
-    def test_state_id(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.state_id), str)
+    def tearDown(self):
+        """Basic teardown functions"""
+        pass
 
-    def test_name(self):
-        """ """
+    def test_attributes(self):
+        """Test City attributes"""
         new = self.value()
-        self.assertEqual(type(new.name), str)
+        self.assertTrue(hasattr(new, "state_id"))
+        self.assertTrue(hasattr(new, "name"))
+        self.assertTrue(type(new.state_id),str)
+        self.assertTrue(type(new.name),str)

@@ -54,7 +54,7 @@ class TestHBNBCommand(unittest.TestCase):
                 cons.onecmd('create User')
             # creating a User instance
             clear_stream(cout)
-            cons.onecmd('create User email="john25@gmail.com" password="123"')
+            cons.onecmd('create User email="john@snow.com" password="johnpwd"')
             mdl_id = cout.getvalue().strip()
             dbc = MySQLdb.connect(
                 host=os.getenv('HBNB_MYSQL_HOST'),
@@ -67,8 +67,8 @@ class TestHBNBCommand(unittest.TestCase):
             cursor.execute('SELECT * FROM users WHERE id="{}"'.format(mdl_id))
             result = cursor.fetchone()
             self.assertTrue(result is not None)
-            self.assertIn('john25@gmail.com', result)
-            self.assertIn('123', result)
+            self.assertIn('john@snow.com.com', result)
+            self.assertIn('johnpwd', result)
             cursor.close()
             dbc.close()
 
@@ -80,7 +80,7 @@ class TestHBNBCommand(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as cout:
             cons = HBNBCommand()
             # showing a User instance
-            obj = User(email="john25@gmail.com", password="123")
+            obj = User(email="john@snow.com", password="johnpwd")
             dbc = MySQLdb.connect(
                 host=os.getenv('HBNB_MYSQL_HOST'),
                 port=3306,
@@ -111,10 +111,10 @@ class TestHBNBCommand(unittest.TestCase):
             cons.onecmd('show User {}'.format(obj.id))
             result = cursor.fetchone()
             self.assertTrue(result is not None)
-            self.assertIn('john25@gmail.com', result)
-            self.assertIn('123', result)
-            self.assertIn('john25@gmail.com', cout.getvalue())
-            self.assertIn('123', cout.getvalue())
+            self.assertIn('john@snow.com.com', result)
+            self.assertIn('johnpwd', result)
+            self.assertIn('john@snow.com.com', cout.getvalue())
+            self.assertIn('johnpwd', cout.getvalue())
             cursor.close()
             dbc.close()
 
