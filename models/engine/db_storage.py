@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This module manages storage/reload to/from database respectively project HBNB"""
+"""This module manages storage and reload to/from a database"""
 
 import os
 from models.state import State
@@ -12,6 +12,7 @@ from models.base_model import BaseModel, Base
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+
 
 class DBStorage:
     """manages storage in our db"""
@@ -43,16 +44,17 @@ class DBStorage:
             for class_type in all_classes:
                 try:
                     query = self.__session.query(class_type)
-                except:
+                except Exception:
                     continue
                 else:
                     for obj in query.all():
-                        obj_key = '{}.{}'.format(obj.__class__.__name__, obj.id)
+                        obj_key = '{}.{}'.format(obj.__class__.__name__,
+                                                 obj.id)
                         objects[obj_key] = obj
         else:
             try:
                 query = self.__session.query(cls)
-            except:
+            except Exception:
                 pass
             else:
                 for obj in query.all():
