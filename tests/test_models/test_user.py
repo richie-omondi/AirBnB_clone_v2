@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-""" """
+""" Module for testing class User"""
 import unittest
 from models.base_model import BaseModel
 from models.user import User
 
 
-class test_User(unittest.TestCase):
-    """Test cases for class UserModel"""
+class TestUser(unittest.TestCase):
+    """Test methods for class User"""
 
     def setUp(self):
         """Basic setup parameters"""

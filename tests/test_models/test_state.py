@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-""" """
-from tests.test_models.test_base_model import test_basemodel
+""" Module for testing class State"""
+import unittest
 from models.state import State
 import os
 
 
-class test_state(test_basemodel):
-    """ states test class"""
+class TestState(unittest.TestCase):
+    """ Individual test methods for class State"""
 
     def __init__(self, *args, **kwargs):
         """ state test class init"""

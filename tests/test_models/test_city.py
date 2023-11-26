@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-""" """
+""" Module for testing class City"""
 
 from models.city import City
 import unittest
 
 
-class test_City(unittest.TestCase):
-    """Test cases for class city"""
+class TestCity(unittest.TestCase):
+    """Test cases for class City"""
 
     def setUp(self):
         """Basic setup parameters"""

@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-""" """
+""" Module for testing the class Amenity"""
 from models.base_model import BaseModel
 import unittest
 from models.amenity import Amenity
 
 
-class test_Amenity(unittest.TestCase):
-    """Test cases for class AmenityModel"""
+class TestAmenity(unittest.TestCase):
+    """Individual test methods for class Amenity"""
 
     def setUp(self):
         """Basic setup parameters"""
