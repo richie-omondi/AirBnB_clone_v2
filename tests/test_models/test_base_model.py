@@ -1,21 +1,18 @@
 #!/usr/bin/python3
-""" """
+""" Module that contains a testcase for class BaseModel"""
 from models.base_model import BaseModel
 import unittest
 import datetime
-from uuid import UUID
-import json
 import os
 import pycodestyle
 
 
-
-
 class TestBaseModel(unittest.TestCase):
-    """Test cases for class BaseModel"""
+    """Class that contains individual test methods for class BaseModel"""
 
     def setUp(self):
-        """Displace current json file from it's position if it exits and make a test json file"""
+        """Displace current json file from it's position if it exits
+        and make a test json file"""
         if os.path.isfile("file.json"):
             os.rename("file.json", "file.json.temp")
 
@@ -32,9 +29,9 @@ class TestBaseModel(unittest.TestCase):
         result = style.check_files(["models/base_model.py"])
         self.assertEqual(result.total_errors, 0,
                          "there's an error found in the model")
-        
+   
     def test_attribute_basics(self):
-        """Test if a class has Id, created_at and updated_at"""
+        """Test if a class has id, created_at and updated_at"""
         sample = BaseModel()
         self.assertTrue(hasattr(sample, "id"))
         self.assertTrue(hasattr(sample, "created_at"))
@@ -63,7 +60,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue("created_at" in tmp)
         self.assertTrue("id" in tmp)
         self.assertTrue("__class__" in tmp)
-
 
 
 if __name__ == "__main__":
