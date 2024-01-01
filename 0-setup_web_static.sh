@@ -3,7 +3,7 @@
 
 apt-get update
 apt-get install -y nginx
-
+server_name=$(hostname)
 mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared/
 echo "Holberton School" > /data/web_static/releases/test/index.html
@@ -15,7 +15,7 @@ chgrp -R ubuntu /data/
 printf %s "server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    add_header X-Served-By $hostname;
+    add_header X-Served-By $server_name;
     root   /var/www/html;
     index  index.html index.htm;
     location /hbnb_static {
