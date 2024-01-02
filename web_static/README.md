@@ -25,6 +25,19 @@ This directory implements webpage design.
 
 ![image](https://github.com/richie-omondi/AirBnB_clone_v2/assets/69873039/8efa2902-6420-4684-8051-d105e8167584)
 
+## Full deployment
+
+![image](https://github.com/richie-omondi/AirBnB_clone_v2/assets/69873039/d1064415-c75e-4f13-aea9-c7b81a9c1a76)
+
+Same command execution as above only this time we make use of the `3-deploy_web-static.py`
+
+## Keep it clean!
+
+![image](https://github.com/richie-omondi/AirBnB_clone_v2/assets/69873039/47730a3a-7d1b-4c7f-b0b5-dee32ae1932a)
+
+![image](https://github.com/richie-omondi/AirBnB_clone_v2/assets/69873039/9345196a-81e1-426c-bcea-3ab9b3a0ef8a)
+
+
 
 
 
