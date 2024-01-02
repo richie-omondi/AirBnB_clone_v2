@@ -3,51 +3,50 @@
 Fabric script that distributes an archive to your web servers
 """
 
+from os.path import exists, basename, splitext
 from datetime import datetime
-from fabric.api import *
-import os
-
+from fabric.api import env, task, put, local, run
+env.use_ssh_config = True
 env.hosts = ["18.233.66.73", "54.209.204.18"]
-env.user = "ubuntu"
 
 
 def do_pack():
     """
-        return the archive path if archive has generated correctly.
+    Function Docs
     """
-
-    local("mkdir -p versions")
-    date = datetime.now().strftime("%Y%m%d%H%M%S")
-    archived_f_path = "versions/web_static_{}.tgz".format(date)
-    t_gzip_archive = local("tar -cvzf {} web_static".format(archived_f_path))
-
-    if t_gzip_archive.succeeded:
-        return archived_f_path
-    else:
-        return None
+    file = "versions/web_static_{}.tgz".format(
+            datetime.now().strftime('%Y%m%d%H%M%S')
+            )
+    print("Packing web_static to {file}".format(file))
+    if local("mkdir -p versions && tar -cvzf {file} web_static".format(file)).succeeded:
+        return file
+    return None
 
 
 def do_deploy(archive_path):
     """
-        Distribute archive.
+    Function Docs
     """
-    if os.path.exists(archive_path):
-        archived_file = archive_path[9:]
-        newest_version = "/data/web_static/releases/" + archived_file[:-4]
-        archived_file = "/tmp/" + archived_file
+    try:
+        if not exists(archive_path):
+            return False
+        ext = basename(archive_path)
+        no_ext, ext = splitext(ext)
+        web_static_dir = "/data/web_static/releases/"
         put(archive_path, "/tmp/")
-        run("sudo mkdir -p {}".format(newest_version))
-        run("sudo tar -xzf {} -C {}/".format(archived_file,
-            newest_version))
-        run("sudo rm {}".format(archived_file))
-        run("sudo mv {}/web_static/* {}".format(newest_version,
-                                                newest_version))
-        run("sudo rm -rf {}/web_static".format(newest_version))
-        run("sudo rm -rf /data/web_static/current")
-        run("sudo ln -s {} /data/web_static/current".format(newest_version))
-
+        commands = [
+                "rm -rf {}{}/".format(web_static_dir, no_ext),
+                "mkdir -p {}{}/".format(web_static_dir, no_ext),
+                "tar -xzf /tmp/{} -C {}{}/".format(ext, web_static_dir, no_ext),
+                "rm /tmp/{}".format(ext),
+                "mv {0}{1}/web_static/* {0}{1}/".format(web_static_dir, no_ext),
+                "rm -rf {}{}/web_static".format(web_static_dir, no_ext),
+                "rm -rf /data/web_static/current",
+                "ln -s {}{}/ /data/web_static/current".format(web_static_dir, no_ext),
+                ]
+        for command in commands:
+            run(command)
         print("New version deployed!")
         return True
-
-    return False
-
+    except Exception:
+        return False
