@@ -37,6 +37,12 @@ Same command execution as above only this time we make use of the `3-deploy_web-
 
 ![image](https://github.com/richie-omondi/AirBnB_clone_v2/assets/69873039/9345196a-81e1-426c-bcea-3ab9b3a0ef8a)
 
+## Puppet for setup
+
+
+![image](https://github.com/richie-omondi/AirBnB_clone_v2/assets/69873039/cab7111f-caf3-4ac9-bfa3-5a4687ceb28f)
+
+
 
 
 
