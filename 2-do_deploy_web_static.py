@@ -7,7 +7,7 @@ from datetime import datetime
 from fabric.api import *
 import os
 
-env.hosts = ["3.84.239.127", "100.25.19.82"]
+env.hosts = ["18.233.66.73", "54.209.204.18"]
 env.user = "ubuntu"
 
 
@@ -38,7 +38,7 @@ def do_deploy(archive_path):
         put(archive_path, "/tmp/")
         run("sudo mkdir -p {}".format(newest_version))
         run("sudo tar -xzf {} -C {}/".format(archived_file,
-                                             newest_version))
+            newest_version))
         run("sudo rm {}".format(archived_file))
         run("sudo mv {}/web_static/* {}".format(newest_version,
                                                 newest_version))
@@ -50,3 +50,4 @@ def do_deploy(archive_path):
         return True
 
     return False
+
