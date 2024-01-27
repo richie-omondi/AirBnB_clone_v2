@@ -8,7 +8,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route('/cities_by_states')
+@app.route('/cities_by_states', strict_slashes=False)
 def states_list():
     """Render template with states
     """
