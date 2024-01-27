@@ -9,9 +9,12 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def close(self):
+def close(arg=None):
     """ Method to close the session """
-    storage.close()
+    try:
+        storage.close()
+    except Exception as err:
+        print(f"Unexpected {err=}, {type(err)=}")
 
 
 @app.route('/states', strict_slashes=False)
