@@ -23,7 +23,10 @@ def states_list():
 def app_teardown(arg=None):
     """Clean-up session
     """
-    storage.close()
+    try:
+        storage.close()
+    except Exception as err:
+        print(f"Unexpected {err=}, {type(err)=}")
 
 
 if __name__ == '__main__':
