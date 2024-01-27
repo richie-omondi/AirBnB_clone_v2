@@ -9,7 +9,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route('/hbnb_filters')
+@app.route('/hbnb_filters', strict_slashes=False)
 def hbnb_filters():
     """Render template with states
     """
