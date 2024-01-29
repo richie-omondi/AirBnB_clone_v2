@@ -17,6 +17,7 @@ class DBStorage:
     """manages storage in our db"""
     __engine = None
     __session = None
+    __Session = None
 
     def __init__(self):
         """Initializes the SQL database storage"""
@@ -29,7 +30,8 @@ class DBStorage:
             user, pswd, host, db_name
         )
         self.__engine = create_engine(
-            DATABASE_URL
+            DATABASE_URL,
+            pool_pre_ping=True
         )
         if env == 'test':
             Base.metadata.drop_all(self.__engine)
@@ -52,8 +54,8 @@ class DBStorage:
         else:
             try:
                 query = self.__session.query(cls)
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"Unexpected {e=}, {type(e)=}")
             else:
                 for obj in query.all():
                     obj_key = '{}.{}'.format(obj.__class__.__name__, obj.id)
@@ -85,12 +87,11 @@ class DBStorage:
     def reload(self):
         """reloads objects in the db"""
         Base.metadata.create_all(self.__engine)
-        SessionFactory = sessionmaker(
+        DBStorage.__Session = scoped_session(sessionmaker(
             bind=self.__engine,
-            expire_on_commit=False)
-        Session = scoped_session(SessionFactory)
-        self.__session = Session()
+            expire_on_commit=False))
+        self.__session = DBStorage.__Session()
 
     def close(self):
         """Closes the storage engine."""
-        self.__session.remove()
+        DBStorage.__Session.remove()
