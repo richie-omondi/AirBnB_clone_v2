@@ -29,8 +29,7 @@ class DBStorage:
             user, pswd, host, db_name
         )
         self.__engine = create_engine(
-            DATABASE_URL,
-            pool_pre_ping=True
+            DATABASE_URL
         )
         if env == 'test':
             Base.metadata.drop_all(self.__engine)
