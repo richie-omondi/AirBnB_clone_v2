@@ -24,13 +24,13 @@ def wrapper_all_type(m_class):
     res = {}
     try:
         res = storage.all(m_class)
-    except:
-        res = {}
+    except Exception as e:
+        print(e)
     if res is None or len(res.keys()) == 0:
         try:
             res = storage.all(m_class.__name__)
-        except:
-            res = {}
+        except Exception as e:
+            print(e)
     return res
         
 

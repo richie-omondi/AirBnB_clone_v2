@@ -54,8 +54,8 @@ class DBStorage:
         else:
             try:
                 query = self.__session.query(cls)
-            except Exception as e:
-                print(f"Unexpected {e=}, {type(e)=}")
+            except:
+                pass
             else:
                 for obj in query.all():
                     obj_key = '{}.{}'.format(obj.__class__.__name__, obj.id)
