@@ -1,49 +1,71 @@
-#!/usr/bin/env python3
-"""Doc
-"""
-import MySQLdb
+#!/usr/bin/python3
 import sys
-import uuid
-from models import storage
-from models.state import State
+import requests
+from lxml import html
+import re
+
+states = [
+    ('421a55f4-7d82-47d9-b51c-a76916479545', 'stateA'),
+    ('421a55f4-7d82-47d9-b51c-a76916479546', 'stateB'),
+    ('421a55f4-7d82-47d9-b52c-a76916479547', 'stateC'),
+    ('421a55f4-7d82-47d9-b53c-a76916479548', 'stateD'),
+    ('421a55f4-7d82-47d9-b57c-a76916479549', 'stateE')
+]
+
+NO_PROXY = {
+    'no': 'pass',
+}
 
 
-def add_states(number=1):
-    conn = MySQLdb.connect(host="localhost", port=3306, user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3], charset="utf8")
-    cur = conn.cursor()
+## Request
+page = requests.get('http://0.0.0.0:5000/states_list', proxies=NO_PROXY)
+if int(page.status_code) != 200:
+    print("Status fail: {}".format(page.status_code))
+    sys.exit(1)
 
-    for i in range(number):
-        cur.execute("INSERT INTO `states` (id, created_at, updated_at, name) VALUES ('{}','2016-03-25 19:42:40','2016-03-25 19:42:40','state{}');".format(str(uuid.uuid4()), i))
+## Parsing
+tree = html.fromstring(page.content)
+if tree is None:
+    print("Can't parse page")
+    sys.exit(1)
 
-    conn.commit()
-    cur.close()
-    conn.close()
+## H1
+h1_tags = tree.xpath('//body/h1/text()')
+if h1_tags is None or len(h1_tags) == 0:
+    print("H1 tag not found")
+    sys.exit(1)
 
+if not re.search(r".*States.*", h1_tags[0]):
+    print("Title `States` doesn't found")
+    sys.exit(1)
 
-def wrapper_all_type(m_class):
-    res = {}
-    try:
-        res = storage.all(m_class)
-    except Exception as e:
-        print(e)
-    if res is None or len(res.keys()) == 0:
-        try:
-            res = storage.all(m_class.__name__)
-        except Exception as e:
-            print(e)
-    return res
-        
+## LI state ID
+li_tags = list(filter(None, [x.replace(" ", "").strip(" ").strip("\n").strip("\t") for x in tree.xpath('//body/ul/li/text()')]))
+if li_tags is None or len(li_tags) != 5:
+    print("Doesn't find 5 LI tags (found {})".format(len(li_tags)))
+    sys.exit(1)
 
-print(len(wrapper_all_type(State)))
+for li_tag in li_tags:
+    is_found = False
+    for state_tuple in states:
+        is_found = re.search(r".*{}.*".format(state_tuple[0]), li_tag)
+        if is_found:
+            break
+    if not is_found:
+        print("{} not found".format(li_tag))
+        sys.exit(1)
+            
+## LI state name sorted
+li_tags_b = list(filter(None, [x.replace(" ", "").strip(" ").strip("\n").strip("\t") for x in tree.xpath('//body/ul/li/b/text()')]))
+if li_tags_b is None or len(li_tags_b) != 5:
+    print("Doesn't find 5 LI tags with B tag (found {})".format(len(li_tags_b)))
+    sys.exit(1)
 
-# Initial number of states
-add_states(3)
+idx = 0
+for li_tag in li_tags_b:
+    if not re.search(r".*{}.*".format(states[idx][1]), li_tag):
+        print("{} not found or not sorted".format(li_tag))
+        sys.exit(1)
+    idx += 1
 
-storage.close()
-print(len(wrapper_all_type(State)))
-
-# Add new states
-add_states(2)
-
-storage.close()
-print(len(wrapper_all_type(State)))
+print("OK", end="")
